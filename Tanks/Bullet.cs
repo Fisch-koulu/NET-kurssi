@@ -31,6 +31,7 @@ namespace Tanks
         public void Draw()
         {
             Raylib.DrawCircleV(bulletPos, bulletSize, color);
+            BorderCheck();
         }
 
         public void BulletMove()
@@ -38,6 +39,11 @@ namespace Tanks
             bulletPos += bulletDir * bulletSpeed * Raylib.GetFrameTime();
         }
 
+        /// <summary>
+        /// Katsoo osuiko toiseen tankiin.
+        /// </summary>
+        /// <param name="rec">toisen tankkin hitbox</param>
+        /// <returns>palauttaa true tai false, riippuen osuiko toiseen tankiin.</returns>
         public bool Hit(Rectangle rec)
         {
             if (Raylib.CheckCollisionPointRec(bulletPos, rec))
@@ -50,6 +56,21 @@ namespace Tanks
         }
 
         /// <summary>
+        /// tarkistaa, menikö pallo kentän yli ja "poistaa", jos meni.
+        /// </summary>
+        public void BorderCheck()
+        {
+            if (bulletPos.X <= 0 || bulletPos.X >= 1000) 
+            {
+                Reset();
+                return; }
+            else if (bulletPos.Y <= 0 || bulletPos.Y >= 700) 
+            { 
+                Reset();
+                return; }
+        }
+
+        /// <summary>
         /// laittaa bulletin näytön ulkopuolelle
         /// </summary>
         public void Reset()
@@ -57,5 +78,6 @@ namespace Tanks
             bulletPos = startingPos;
             bulletDir = Vector2.Zero;
         }
+
     }
 }
