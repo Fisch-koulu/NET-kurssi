@@ -28,7 +28,9 @@ namespace LunarLander
         Vector2 landSize;
 
         //polttoaine
-        float fuel = 20;
+        float fuel;
+        float fuelMax;
+        float fuelIndicator;
         bool engineOn = false;
 
         //äänet
@@ -57,17 +59,22 @@ namespace LunarLander
             spaceMusic = Raylib.LoadMusicStream("space_waves.mp3");
             //soita tausta musiikki.
             Raylib.PlayMusicStream(spaceMusic);
-            Raylib.SetMusicVolume(spaceMusic, 50f);
+            Raylib.SetMusicVolume(spaceMusic, 30f);
             Raylib.SetSoundVolume(engineSound, 50f);
 
             //ship tai alus
             //lataa kuva ennen pääsilmukkaa tai kuva ladataan turhaan monta kertaa ja ottaa paljon muistia
             shipTexture = Raylib.LoadTexture("ship.png");
 
+            //polttoaine
+            fuel = 100f;
+            fuelMax = 100f;
+            fuelIndicator = Raylib.GetScreenWidth() / 4;
+
             //liikkumiseen aloitukset
             shipPos = new Vector2(Raylib.GetScreenWidth() / 2, shipTexture.Height);
             shipVelocity = Vector2.Zero;
-            engineForce = new Vector2(0, -90);
+            engineForce = new Vector2(90, -90);
             gravityForce = new Vector2(0, 60);
 
             //Reset arvioit, jotta voi aloittaa pelin uudelleen ilman pelistä poistumista
@@ -115,14 +122,14 @@ namespace LunarLander
                 Vector2 acceloration = gravityForce;
 
                 //jos painetaan nappia ja polttoaine ei ole loppu, alus voi nousta.
-                if (Raylib.IsKeyDown(KeyboardKey.M) && fuel > 0) 
+                if (Raylib.IsKeyDown(KeyboardKey.W) && fuel > 0) 
                 {
                     engineOn = true;
 
                     //ylös liikkuminen.
-                    acceloration += engineForce;
+                    acceloration.Y += engineForce.Y;
                     //hiljalleen poistetaan polttoainetta.
-                    fuel -= 5 * Raylib.GetFrameTime();
+                    fuel -= 20 * Raylib.GetFrameTime();
 
                     //katso, jos ääniefekti soi, ettei loppaa alkua.
                     if (!Raylib.IsSoundPlaying(engineSound))
@@ -137,7 +144,15 @@ namespace LunarLander
                     //lopeta ääniefektin soittaminen.
                     Raylib.StopSound(engineSound);
                 }
-            
+                if (Raylib.IsKeyDown(KeyboardKey.A))
+                {
+                    acceloration.X -= engineForce.X;
+                }
+                if (Raylib.IsKeyDown(KeyboardKey.D))
+                {
+                    acceloration.X += engineForce.X;
+                }
+
                 shipVelocity += acceloration * Raylib.GetFrameTime();
                 shipPos += shipVelocity * Raylib.GetFrameTime();
             }
@@ -170,6 +185,8 @@ namespace LunarLander
             Drawing.TextureCentered(shipTexture, shipPos);
 
             //ui
+            Raylib.DrawRectangle(8, 8, (int)(fuelIndicator), 15, Color.Red);
+            Raylib.DrawRectangle(8, 8, (int)(fuelIndicator * (fuel / fuelMax)), 15, Color.Yellow);
             Raylib.DrawText("Fuel" + fuel, 10, 10, 20, Color.White);
             if (gameWin)
             {
