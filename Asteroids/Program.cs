@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using Ruptus_kirjasto;
 
 namespace Asteroids
 {
@@ -11,23 +12,20 @@ namespace Asteroids
             Program asteroids = new Program();
             asteroids.Run();
         }
-        //muuttujat
-        //ympyrä
+        //Muuttujat:
+        //asteroid
         Vector2 ympy1 = new Vector2(300, 100);
         float rad1 = 20;
         Color color1 = Color.Pink;
-
-        Vector2 ympy2 = new Vector2(400, 100);
-        float rad2 = 20;
-        Color color2 = Color.Blue;
-
         Vector2 suunta1 = new Vector2(1, 0);
-        Vector2 suunta2 = new Vector2(-1, 0);
         float speed = 20;
 
+        AsteroidRock as1;
+        List<AsteroidRock> asteroidit = new List<AsteroidRock>();
         public void Run()
         {
             Raylib.InitWindow(600, 600, "Asteroids");
+            as1 = new AsteroidRock(ympy1, rad1, suunta1, speed);
 
             while (Raylib.WindowShouldClose() == false)
             {
@@ -40,14 +38,18 @@ namespace Asteroids
 
         public void Update()
         {
-            ympy1 += suunta1 * speed * Raylib.GetFrameTime();
-            ympy2 += suunta2 * speed * Raylib.GetFrameTime();
-            if (Raylib.CheckCollisionCircles(ympy1, rad1, ympy2, rad2))
-            {
-                suunta1.X *= -1f;
-                suunta2.X *= -1f;
-            }
+            
         }
+
+        /// <summary>
+        /// Tekee uuden asteroidin.
+        /// </summary>
+        public void CreateAsteroids()
+        {
+
+        }
+
+
 
         /// <summary>
         /// Pirtää pelin.
@@ -58,8 +60,8 @@ namespace Asteroids
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.Black);
 
-            Raylib.DrawCircleV(ympy1, rad1, color1);
-            Raylib.DrawCircleV(ympy2, rad2, color2);
+            //piirrä peli
+
 
             //lopeta piirtäminen.
             Raylib.EndDrawing();

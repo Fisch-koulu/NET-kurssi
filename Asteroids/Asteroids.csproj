@@ -11,4 +11,8 @@
     <PackageReference Include="Raylib-cs" Version="8.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ruptus_kirjasto\Ruptus_kirjasto.csproj" />
+  </ItemGroup>
+
 </Project>
