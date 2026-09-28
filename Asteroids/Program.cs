@@ -18,11 +18,7 @@ namespace Asteroids
         List<AsteroidRock> asteroidit = new List<AsteroidRock>();
 
         //pelaaja
-        Vector2 pos;
-        Rectangle rect;
-        Vector2 dir;
-        float angle = 0f;
-        float turnSpeed = 0f;
+        Player player;
         
 
         public void Run()
@@ -33,11 +29,8 @@ namespace Asteroids
             {
                 asteroidit.Add(CreateAsteroids());
             }
-
             //pelaaja
-            pos = new Vector2(100, 100);
-            rect = new Rectangle(pos, 50, 50);
-            dir = new Vector2(1, 0);
+            player = new Player(Raylib.GetScreenCenter(), 100f, 5f);
 
             while (Raylib.WindowShouldClose() == false)
             {
@@ -56,7 +49,7 @@ namespace Asteroids
                 asteroidit[i].TransformMove();
             }
             //liikuta pelaajaa
-            kännä();
+            player.TurnMove();
         }
 
         /// <summary>
@@ -84,18 +77,6 @@ namespace Asteroids
                 (float)(rand.Next(20, 40))); //nopeus
         }
 
-        public void kännä()
-        {
-            Debug.Write("moi");
-            if (Raylib.IsKeyDown(KeyboardKey.R))
-            {
-                angle += turnSpeed;
-                Debug.WriteLine(angle);
-
-                Matrix3x2 rotation = Matrix3x2.CreateRotation(angle);
-                dir = Vector2.Transform(Vector2.UnitX, rotation);
-            }
-        }
 
         /// <summary>
         /// Pirtää pelin.
@@ -111,7 +92,7 @@ namespace Asteroids
             {
                 asteroidit[i].Draw();
             }
-            Raylib.DrawRectanglePro(rect, rect.Size/2f, angle, Color.Red);
+            player.DrawPlayer();
 
             //lopeta piirtäminen.
             Raylib.EndDrawing();
