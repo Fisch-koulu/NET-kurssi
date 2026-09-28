@@ -13,19 +13,15 @@ namespace Asteroids
             asteroids.Run();
         }
         //Muuttujat:
-        //asteroid
-        Vector2 ympy1 = new Vector2(300, 100);
-        float rad1 = 20;
-        Color color1 = Color.Pink;
-        Vector2 suunta1 = new Vector2(1, 0);
-        float speed = 20;
-
-        AsteroidRock as1;
+        //asteroidit
         List<AsteroidRock> asteroidit = new List<AsteroidRock>();
         public void Run()
         {
             Raylib.InitWindow(600, 600, "Asteroids");
-            as1 = new AsteroidRock(ympy1, rad1, suunta1, speed);
+            for (int i = 0; i < 3;  i++)
+            {
+                asteroidit.Add(CreateAsteroids());
+            }
 
             while (Raylib.WindowShouldClose() == false)
             {
@@ -38,15 +34,35 @@ namespace Asteroids
 
         public void Update()
         {
-            
+            for (int i = 0; i < asteroidit.Count; i++)
+            {
+                asteroidit[i].TransformMove();
+            }
         }
 
         /// <summary>
         /// Tekee uuden asteroidin.
         /// </summary>
-        public void CreateAsteroids()
+        public AsteroidRock CreateAsteroids()
         {
+            //random luku
+            Random rand = new Random();
+            //sunnan arpominen
+            Vector2 randSuunta = new Vector2(
+                rand.NextSingle() * 2f - 1f,
+                rand.NextSingle() * 2f - 1f);
+            randSuunta = Vector2.Normalize(randSuunta);
+            //paikan arpominen
+            Vector2 paikka = new Vector2();
+            paikka.X = rand.Next(Raylib.GetScreenWidth());
+            paikka.Y = rand.Next(Raylib.GetScreenHeight());
 
+            //tee Asteroidi
+            return new AsteroidRock(
+                paikka,     //paikka
+                30f,        //ympyrän säde
+                randSuunta, //suunta
+                (float)(rand.Next(20, 40))); //nopeus
         }
 
 
@@ -61,7 +77,10 @@ namespace Asteroids
             Raylib.ClearBackground(Color.Black);
 
             //piirrä peli
-
+            for (int i = 0; i < asteroidit.Count; i++)
+            {
+                asteroidit[i].Draw();
+            }
 
             //lopeta piirtäminen.
             Raylib.EndDrawing();
