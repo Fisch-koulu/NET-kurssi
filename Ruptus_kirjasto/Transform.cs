@@ -3,7 +3,7 @@ using Raylib_cs;
 
 namespace Ruptus_kirjasto
 {
-    internal class Transform
+    public class Transforma
     {
         private Vector2 position;   //paikka
         private Vector2 direction;  //suunta
@@ -13,7 +13,7 @@ namespace Ruptus_kirjasto
         public Vector2 Position { get { return position; } set { position = value; } } 
         public Vector2 Direction { get { return direction; } set { direction = value; } }
 
-        public Transform(Vector2 position, Vector2 direction, float speed)
+        public Transforma(Vector2 position, Vector2 direction, float speed)
         {
             this.position = position;
             this.direction = direction;
