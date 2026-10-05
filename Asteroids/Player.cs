@@ -16,9 +16,9 @@ namespace Asteroids
         Vector2 direction;
         float turnSpeed;
 
-        //radiaani
+        //radiaani: kaikki matemaattiset funktiot (Matrix, sin, cos) haluaa radiaanin.
         float angleRad = 0f;
-        //astetita
+        //astetita: helpompi laskea ihmiselle ja piirto funktio tarvitsee.
         float angleDeg;
 
         public Player(Vector2 position, float speed, float turnSpeed) 
@@ -38,7 +38,7 @@ namespace Asteroids
         }
 
         /// <summary>
-        /// Liikuttaa ja Kääntää pelaajaa
+        /// Liikuttaa ja Kääntää pelaajaa. W liikutaan ja A/D käännytään.
         /// </summary>
         public void TurnMove()
         {
@@ -53,26 +53,29 @@ namespace Asteroids
             {
                 angleRad += turnSpeed * Raylib.GetFrameTime();
                 angleDeg = angleRad * Raylib.RAD2DEG;
-
-                Matrix3x2 rotation = Matrix3x2.CreateRotation(angleRad);
-                direction = Vector2.Transform(Vector2.UnitX, rotation);
             }
             if (Raylib.IsKeyDown(KeyboardKey.A))
             {
                 angleRad -= turnSpeed * Raylib.GetFrameTime();
                 angleDeg = angleRad * Raylib.RAD2DEG;
-
-                Matrix3x2 rotation = Matrix3x2.CreateRotation(angleRad);
-                direction = Vector2.Transform(Vector2.UnitX, rotation);
             }
 
+            //tee/käytä Matrix
+            Matrix3x2 rotationMatrix = Matrix3x2.CreateRotation(angleRad);
+            direction = Vector2.Transform(Vector2.UnitX, rotationMatrix);
+
+            //rectangle saa saman paikan
             rect.X = position.X; 
             rect.Y = position.Y;
         }
 
+        /// <summary>
+        /// Piirtää pelaajan, joka voi kääntyä.
+        /// </summary>
         public void DrawPlayer()
         {
             Raylib.DrawRectanglePro(rect, rect.Size / 2f, angleDeg, Color.Red);
+            Raylib.DrawLineV(position + (direction * size / 2), position + (direction * size), Color.Blue);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Asteroids
                 asteroidit.Add(CreateAsteroids());
             }
             //pelaaja
-            player = new Player(Raylib.GetScreenCenter(), 100f, 5f);
+            player = new Player(Raylib.GetScreenCenter(), 100f, 4f);
 
             while (Raylib.WindowShouldClose() == false)
             {
@@ -55,7 +55,7 @@ namespace Asteroids
         /// <summary>
         /// Tekee uuden asteroidin.
         /// </summary>
-        public AsteroidRock CreateAsteroids()
+        public AsteroidRock CreateAsteroids(float? size = null)
         {
             //random luku
             Random rand = new Random();
@@ -69,11 +69,16 @@ namespace Asteroids
             paikka.X = rand.Next(Raylib.GetScreenWidth());
             paikka.Y = rand.Next(Raylib.GetScreenHeight());
 
+            if (size == null)
+            {
+                size = 30f;
+            }
+
             //tee Asteroidi
             return new AsteroidRock(
-                paikka,     //paikka
-                30f,        //ympyrän säde
-                randSuunta, //suunta
+                paikka,         //paikka
+                (float)size,    //ympyrän säde
+                randSuunta,     //suunta
                 (float)(rand.Next(20, 40))); //nopeus
         }
 
