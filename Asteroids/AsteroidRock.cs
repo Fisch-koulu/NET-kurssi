@@ -12,6 +12,8 @@ namespace Asteroids
         float radius;
         float speed;
 
+        public Vector2 Position { get => position; set => position = value; }
+
         public AsteroidRock(Vector2 position, float radius, Vector2 direction, float speed)
         {
             this.position = position;

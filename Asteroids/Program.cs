@@ -30,7 +30,7 @@ namespace Asteroids
                 asteroidit.Add(CreateAsteroids());
             }
             //pelaaja
-            player = new Player(Raylib.GetScreenCenter(), 100f, 4f);
+            player = new Player(Raylib.GetScreenCenter(), 100f, 4f, KeyboardKey.K);
 
             while (Raylib.WindowShouldClose() == false)
             {
@@ -49,13 +49,25 @@ namespace Asteroids
                 asteroidit[i].TransformMove();
             }
             //liikuta pelaajaa
+            if (Raylib.IsKeyDown(KeyboardKey.W))
+            {
+                player.Move();
+            }
             player.TurnMove();
+            player.ShootUpdate();
+
+            //ammus
+            for (int i = 0; i < player.bullets.Count; ++i)
+            {
+                player.bullets[i].BulletMove();
+            }
+            CheckCollision();
         }
 
         /// <summary>
         /// Tekee uuden asteroidin.
         /// </summary>
-        public AsteroidRock CreateAsteroids(float? size = null)
+        public AsteroidRock CreateAsteroids(float size = 30f)
         {
             //random luku
             Random rand = new Random();
@@ -69,19 +81,51 @@ namespace Asteroids
             paikka.X = rand.Next(Raylib.GetScreenWidth());
             paikka.Y = rand.Next(Raylib.GetScreenHeight());
 
-            if (size == null)
-            {
-                size = 30f;
-            }
 
             //tee Asteroidi
             return new AsteroidRock(
                 paikka,         //paikka
-                (float)size,    //ympyrän säde
+                size,    //ympyrän säde
                 randSuunta,     //suunta
-                (float)(rand.Next(20, 40))); //nopeus
+                rand.Next(20, 40)); //nopeus
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void CheckCollision()
+        {
+            //tarkistaa pelaajan ja asteroidin törmäys
+            /*for (int a = asteroidit.Count - 1;  a >= 0; --a)
+            {
+                if (Raylib.CheckCollisionCircles(asteroidit[a].Position, 30f, player.POSITION, 20f)) 
+                {
+                    GameOver();
+                }
+            }*/
+            //tarkista viimeisin ammus
+            for (int b = player.bullets.Count - 1; b >= 0; b--)
+            {
+                //katso kaikki asteroidit läpi
+                for (int a = asteroidit.Count - 1; a >= 0; a--)
+                {
+                    Bullet checkBullet = player.bullets[b];
+                    AsteroidRock checkAsteroid = asteroidit[a];
+
+                    if (Raylib.CheckCollisionCircles(checkBullet.Position, 2f, checkAsteroid.Position, 30f))
+                    {
+                        //poista ammus
+                        player.bullets.RemoveAt(b);
+
+                        //luo 2 uuttaa asteroidia
+                        asteroidit.Add(CreateAsteroids());
+
+                        //skippaa loput asteroidit
+                        break;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Pirtää pelin.
@@ -98,6 +142,10 @@ namespace Asteroids
                 asteroidit[i].Draw();
             }
             player.DrawPlayer();
+            for (int i = 0; i < player.bullets.Count; ++i)
+            {
+                player.bullets[i].BulletDraw();
+            }
 
             //lopeta piirtäminen.
             Raylib.EndDrawing();
