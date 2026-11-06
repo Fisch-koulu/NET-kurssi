@@ -40,30 +40,6 @@ namespace Asteroids
 
         public bool OutOfBoundsCheck()
         {
-            //tarkista meneekö pallo näytöstä pois
-            //X-akseli
-            if (position.X < 0) 
-            {
-                position.X = Raylib.GetRenderWidth();
-                return true; 
-            }
-            else if (position.X > Raylib.GetScreenWidth()) 
-            {
-                position.X = 0;
-                return true; 
-            }
-            //Y-akseli
-            if (position.Y < 0) 
-            {
-                position.Y = Raylib.GetRenderHeight();
-                return true; 
-            }
-            else if (position.Y > Raylib.GetScreenHeight()) 
-            {
-                position.Y = 0;
-                return true; 
-            }
-            //jos ei mee, palauta false
             return false;
         }
 

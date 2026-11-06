@@ -15,4 +15,13 @@
     <ProjectReference Include="..\Ruptus_kirjasto\Ruptus_kirjasto.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Images\playerShip1_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\ship_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

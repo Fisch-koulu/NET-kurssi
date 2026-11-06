@@ -39,8 +39,9 @@ namespace Asteroids
 
         //sprite
         Sprite sprite;
+        public WrapAround wrap;
 
-        public Player(Vector2 position, float speed, float turnSpeed, KeyboardKey shootKey) 
+        public Player(Texture2D texture, Vector2 position, float speed, float turnSpeed, KeyboardKey shootKey) 
         {
             //pelaajan paikka
             this.position = position;
@@ -60,7 +61,20 @@ namespace Asteroids
             this.shootKey = shootKey;
 
             //sprite
+            this.texture = texture;
             sprite = new Sprite(texture);
+
+            wrap = new WrapAround(position, texture);
+        }
+
+        public void Update()
+        {
+            wrap.Position = position;
+            if (wrap.OutOfBoundsCheck()) 
+            { 
+                position = wrap.Position; 
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.W)) { Move(); }
         }
 
         /// <summary>
@@ -105,7 +119,8 @@ namespace Asteroids
 
             //tee/käytä Matrix
             Matrix3x2 rotationMatrix = Matrix3x2.CreateRotation(angleRad);
-            direction = Vector2.Transform(Vector2.UnitX, rotationMatrix);
+            //Y:-1 tarkoittaa ylöspäin
+            direction = Vector2.Transform(-Vector2.UnitY, rotationMatrix);
         }
 
         /// <summary>
@@ -121,7 +136,7 @@ namespace Asteroids
             rect.Y = position.Y;
             Raylib.DrawRectanglePro(rect, rect.Size / 2f, angleDeg, Color.Red);*/
             //Raylib.DrawTexturePro(texture, drawSource, rectDestination, origin, angleDeg, Color.Red);
-            Raylib.DrawLineV(position + (direction * size / 2), position + (direction * size), Color.Blue);
+            //Raylib.DrawLineV(position + (direction * size / 2), position + (direction * size), Color.Blue);
         }
 
         public void ShootUpdate()

@@ -19,7 +19,7 @@ namespace Asteroids
 
         //pelaaja
         Player player;
-        
+        Texture2D texture;
 
         public void Run()
         {
@@ -30,13 +30,16 @@ namespace Asteroids
                 asteroidit.Add(CreateAsteroids());
             }
             //pelaaja
-            player = new Player(Raylib.GetScreenCenter(), 100f, 4f, KeyboardKey.K);
+            texture = Raylib.LoadTexture("Images/ship_blue.png");
+            player = new Player(texture, Raylib.GetScreenCenter(), 100f, 4f, KeyboardKey.K);
 
             while (Raylib.WindowShouldClose() == false)
             {
                 Update();
                 Draw();
             }
+            //vapauta kuva
+            Raylib.UnloadTexture(texture);
             //sulje ikkuna
             Raylib.WindowShouldClose();
         }
@@ -49,10 +52,8 @@ namespace Asteroids
                 asteroidit[i].TransformMove();
             }
             //liikuta pelaajaa
-            if (Raylib.IsKeyDown(KeyboardKey.W))
-            {
-                player.Move();
-            }
+            player.Update();
+            
             player.TurnMove();
             player.ShootUpdate();
 
